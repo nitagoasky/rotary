@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>canvas</title>
+<meta name ="viewport" content ="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">
+<style>
+	body {
+		background: url('/body_bg2.jpg') 0% 0% / cover
+	}
+	#gt_ratary{
+		position: relative;
+		margin-top: 35%;
+		width:95%;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.ratary_canvas {
+		width: 100%;
+		transition: all 6s ease;
+	}
+	.ratary_pointer {
+		position: absolute;
+		width: 36%;
+		height: 40%;
+		left: 32%;
+		top: 28%;
+	}
+</style>
+</head>
+ 
+<body>
+	<div id="gt_ratary">
+		<canvas class="ratary_canvas" width="360" height="360"></canvas>
+		<img class="ratary_pointer" src="/point.png">
+	</div>
+	<!-- <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script> -->
+	<script src="./ratary.js"></script>
+	<script type="text/javascript">
+	document.addEventListener('DOMContentLoaded', function() {
+		var ratary_canvas = document.getElementsByClassName('ratary_canvas')[0];
+		ratary.init({
+			id: 'gt_ratary',
+			config : function(callback){
+				callback && callback(['1元红包','2元红包','3元红包','4元红包','5元红包','6元红包']);
+			},
+			getPrize : function(callback) {
+				var prizeId = Math.random() * 6 >>> 0;
+				if(prizeId === 0){
+					prizeId = 6;
+				}
+				chances = 2;
+				callback && callback([prizeId, chances]);
+			}
+		});
+		ratary.stopRotate = function(prizeId){
+			alert('谢谢，你抽到了' + prizeId);
+		}
+	},false);
+	</script>
+</body>
+ 
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+   <div class="pie">       
+    <canvas id="canvas" width="960" height="960" style="width:320px;height:320px;"></canvas>
+   </div>
+<!-- canvas的画布宽高（分辨率）是width和height，而style中的宽高是canvas在页面中显示的宽高，画布分辨率越高，绘制出来的图任意缩放也不会出现很大的锯齿 -->
+</body>
+<script>
+var canvas = document.getElementById('canvas');   
+var ctx = canvas.getContext('2d');
+
+    var smccircle = {x: 480,
+                  y: 480,
+                  radius: 342};
+
+                      //转换弧度
+    function rads(x){
+        return Math.PI*x/180;
+    }
+drawCircularText(smccircle,'肌肉', rads(0), rads(10),'center');
+    function drawCircularText(s,string, startAngle, endAngle ,lv){
+        var radius = s.radius,
+            angleDecrement = (startAngle - endAngle)/(string.length-1),
+            angle = parseFloat(startAngle),
+            index = 0,
+            character;
+        
+        ctx.save();
+        
+        ctx.fillStyle = 'black';
+        ctx.font = '40px 微软雅黑';
+        ctx.textAlign = lv;
+        ctx.textBaseline = 'middle';
+        
+        while (index < string.length) {
+            character = string.charAt(index);
+            
+            ctx.save();
+            ctx.beginPath();
+            ctx.translate(s.x + Math.cos(angle) * radius,
+                          s.y + Math.sin(angle) * radius);
+
+            ctx.rotate(Math.PI/2 + angle);
+            
+            ctx.fillText(character, 0, 0);
+//            ctx.strokeText(character, 0, 0);
+            
+            angle -= angleDecrement;
+            index++;
+            ctx.restore();
+        }
+        ctx.restore();
+    }
+  
+</script>
+</html>
