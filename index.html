@@ -32,31 +32,57 @@
 <body>
 	<div id="gt_ratary">
 		<canvas class="ratary_canvas" width="360" height="360"></canvas>
-		<img class="ratary_pointer" src="./point.png">
+		   <img class="ratary_pointer" src="./point.png">   
 	</div>
+	<img id="hb" src="./hb.png" alt="" style="display:none">
+	<img id="thank_you" src="./6.png" alt="" style="display:none">
 	<!-- <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script> -->
 	<script src="./ratary.js"></script>
 	<script type="text/javascript">
-	document.addEventListener('DOMContentLoaded', function() {
+	// document.addEventListener('DOMContentLoaded', function() {
+	window.onload = function(){
 		var ratary_canvas = document.getElementsByClassName('ratary_canvas')[0];
+		var get_rand = function($proArr) { 
+			var $result = '';  
+			//概率数组的总概率精度 
+			// var $proSum = array_sum($proArr);
+			var $proSum = 0;  
+			for (x in $proArr) {
+				$proSum += $proArr[x];
+			}
+			//概率数组循环 
+			for (x in $proArr) {
+				$randNum = Math.floor(Math.random() * $proSum + 1); 
+				if ($randNum <= $proArr[x]) { 
+					$result = x; 
+					break; 
+				} else { 
+					$proSum -= $proArr[x]; 
+				} 
+			}
+			$proArr.splice(0, $proArr.length);  
+			return $result; 
+		}
 		ratary.init({
 			id: 'gt_ratary',
 			config : function(callback){
-				callback && callback(['1元红包','2元红包','3元红包','4元红包','5元红包','6元红包']);
+				callback && callback(
+					['1元红包','夏威夷果','3元红包','夏威夷果','5元红包','夏威夷果'],
+					["#FFFFFF","#5fcbd5", "#FFFFFF", "#5fcbd5", "#FFFFFF","#5fcbd5", "#FFFFFF", "#5fcbd5"]
+				);
 			},
 			getPrize : function(callback) {
-				var prizeId = Math.random() * 6 >>> 0;
-				if(prizeId === 0){
-					prizeId = 6;
-				}
+				var prizeId = get_rand([1000000,100000,10000,1000,100,10,1]);
+				// var prizeId = Math.random() * 6 >>> 0;
 				chances = 2;
 				callback && callback([prizeId, chances]);
 			}
 		});
-		ratary.stopRotate = function(prizeId){
-			alert('谢谢，你抽到了' + prizeId);
+		ratary.stopRotate = function(data){
+			alert(data);
 		}
-	},false);
+	// },false);
+	}
 	</script>
 </body>
  

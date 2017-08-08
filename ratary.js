@@ -1,5 +1,6 @@
 (function(){
     var prizes,
+        colors,
         num,
         canvas,
         pointer,
@@ -71,8 +72,9 @@
 
     var init = function(opts) {
         fnGetPrize = opts.getPrize;
-        opts.config(function(data) {
+        opts.config(function(data,colors) {
             prizes = opts.prizes = data;
+            colors = opts.colors = colors;
             num = prizes.length;
             draw(opts);
         });
@@ -89,7 +91,7 @@
         if(!opts.id || num >>> 0 == 0) return false;
 
         var id;
-        
+        var arc = Math.PI / ( num / 2 );
         id = opts.id;
         rotateDeg = 360 / num / 2 + 90,  // 扇形回转角度
         
@@ -107,22 +109,40 @@
             ctx.rotate((360 / num * i - rotateDeg) * Math.PI / 180);
             ctx.arc(0, 0, 180, 0, 2 * Math.PI / num, false);
             ctx.closePath();
-            if(i % 2 == 0){
-                ctx.fillStyle = '#ffb820';
-            } else {
-                ctx.fillStyle = '#ffcb3f';
-            }
+            ctx.fillStyle = opts.colors[i];
             ctx.fill();
             ctx.lineWidth = 0.5;
             ctx.strokeStyle = '#f48d24';
             ctx.stroke();
             var startArts = 360 / num ;
-            drawCircularText(ctx,prizes[i],rad(10),rad(50));
+            var color = '';
+            if(i % 2 == 0){
+                color = '#FF0033';
+            }else {
+                color = '#fff';
+            }
+            ctx.save();
+            ctx.beginPath();
+            ctx.translate(Math.cos(arc / 4) * 130, Math.sin(arc / 4) * 130);
+            ctx.rotate(arc / 2 + Math.PI / 2);
+
+            if(i % 2 == 0) {
+                img = document.getElementById('hb');
+            }else{
+                img = document.getElementById('thank_you');
+            }
+
+            ctx.drawImage(img,0,0);
+            ctx.closePath();
+            ctx.restore();
+
+            drawCircularText(ctx,prizes[i],rad(10),rad(50),color);
+
             ctx.restore();
         }
     }
 
-    var drawCircularText = function(ctx, string, startAngle, endAngle) {
+    var drawCircularText = function(ctx, string, startAngle, endAngle, color) {
         var angleDecrement = (startAngle - endAngle)/(string.length-1),
             angle = parseFloat(startAngle),
             index = 0;
@@ -130,14 +150,13 @@
             character = string.charAt(index);
             ctx.save();
             ctx.beginPath();
-            ctx.fillStyle = '#fff';
+            ctx.fillStyle = color;
             ctx.textAlign = 'center';  // 位置
-            ctx.font = '16px sans-serif';
+            ctx.font = 'normal normal bold 16px sans-serif';
             ctx.translate(Math.cos(angle) * 150, Math.sin(angle) * 150);
             ctx.rotate(Math.PI/2 + angle);
             ctx.fillText(character, 0, 0);
             angle -= angleDecrement;
-            console.log(angle);
             ctx.closePath();
             ctx.restore();
             index++;
@@ -179,7 +198,7 @@
 
     var stopRotate = function() {
         // alert('css3运动结束！我是回调函数，没有使用第三方类库！');
-        ratary.stopRotate(optsPrize.prizeId);
+        ratary.stopRotate(prizes[optsPrize.prizeId]);
     }
 
     var ratary = {
