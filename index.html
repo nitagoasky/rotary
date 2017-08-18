@@ -41,6 +41,7 @@
  
 <body>
 	<div id="gt_ratary">
+		<span id="test"></span>
 		<canvas class="ratary_canvas" width="360" height="360"></canvas>
 		<img class="ratary_pointer" src="./point.png">   
 	</div>
@@ -94,8 +95,9 @@
 	// },false);
 
 	$(document).keydown(function(event){
-		alert(event.keyCode);
+		$('#test').html(event.keyCode);
 		if(event.keyCode == 13) {
+			$('#test').html(event.keyCode + 'gaotian');
 			$(".ratary_pointer").click();
 		}
 
