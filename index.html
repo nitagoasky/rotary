@@ -94,14 +94,14 @@
 		}
 	// },false);
 
-	// $(document).keydown(function(event){
-	// 	$('#test').html(event.keyCode);
-	// 	if(event.keyCode == 13) {
-	// 		$('#test').html(event.keyCode + 'gaotian');
-	// 		$(".ratary_pointer").click();
-	// 	}
+	$(document).keydown(function(event){
+		$('#test').html(event.keyCode);
+		if(event.keyCode == 13) {
+			$('#test').html(event.keyCode + 'gaotian');
+			$(".ratary_pointer").trigger('click');
+		}
 
-	// });
+	});
 
 	}
 	</script>
